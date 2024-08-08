@@ -5,7 +5,10 @@
       layout:decorate="~{layout/main}">
 <body>
 <div class="flex h-dvh" layout:fragment="content">
-    <div class="flex w-1/2 items-center justify-center bg-neutral"><button class="btn btn-primary btn-xs sm:btn-sm md:btn-md lg:btn-lg">Responsive</button></div>
+    <form action="#" class="flex w-1/2 items-center justify-center bg-neutral" method="post"
+          th:action="@{/clockIn}">
+        <button class="btn btn-primary btn-xs sm:btn-sm md:btn-md lg:btn-lg">Clock-in</button>
+    </form>
     <div class="w-1/2 p-5">
         <ol>
             <li>8/7/24 8:01AM clock-in</li>
