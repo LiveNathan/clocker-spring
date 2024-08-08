@@ -1,5 +1,6 @@
 package dev.nathanlively.clocker_spring;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -21,11 +22,11 @@ public class InMemoryClockRepository implements ClockRepository {
 
     @Override
     public void save(ClockEvent clockEvent) {
-
+        clockEvents.put(clockEvent.id(), clockEvent);
     }
 
     @Override
     public List<ClockEvent> findAll() {
-        return List.of();
+        return new ArrayList<>(clockEvents.values());
     }
 }
