@@ -52,7 +52,7 @@
             <artifactId>integrations-spring-boot3</artifactId>
             <version>1.4.0</version>
         </dependency>
-    <dependency> <!-- need this for @Read/Write -->
+    <dependency> <!-- need this for @Read/Write for mutex locking -->
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-aop</artifactId>
     </dependency>
