@@ -10,8 +10,15 @@ import org.springframework.web.servlet.view.RedirectView;
 @Controller
 @RequestMapping("/")
 public class HomeController {
+    private final ClockEventService clockEventService;
+
+    public HomeController(ClockEventService clockEventService) {
+        this.clockEventService = clockEventService;
+    }
+
     @GetMapping
     public String index(Model model) {
+        model.addAttribute("clockEvents", clockEventService.all());
         return "index";
     }
 
