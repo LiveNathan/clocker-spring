@@ -20,7 +20,7 @@ class HomeControllerTest {
         repository = InMemoryClockRepository.createEmpty();
         ClockEvent clockEvent = new ClockEvent(1L, ClockService.fixed(), ClockEventType.IN);
         repository.save(clockEvent);
-        clockEventService = new ClockEventService();
+        clockEventService = new ClockEventService(repository);
         controller = new HomeController(clockEventService);
     }
 
