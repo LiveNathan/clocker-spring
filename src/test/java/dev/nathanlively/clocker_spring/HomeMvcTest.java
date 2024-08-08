@@ -7,6 +7,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(HomeController.class)
@@ -19,5 +20,11 @@ class HomeMvcTest {
     public void getRequestToIndex() throws Exception {
         mockMvc.perform(get("/"))
                 .andExpect(status().is2xxSuccessful());
+    }
+
+    @Test
+    void postRequestToClockIn() throws Exception {
+        mockMvc.perform(post("/clockIn"))
+                .andExpect(status().is3xxRedirection());
     }
 }
