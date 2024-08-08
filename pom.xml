@@ -52,7 +52,10 @@
             <artifactId>integrations-spring-boot3</artifactId>
             <version>1.4.0</version>
         </dependency>
-
+    <dependency> <!-- need this for @Read/Write -->
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-aop</artifactId>
+    </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
