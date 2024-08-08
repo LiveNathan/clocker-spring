@@ -4,11 +4,17 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/main}">
 <body>
-<div layout:fragment="content">
-    <!-- Add content here -->
-    <div>Welcome to your Spring Boot with Thymeleaf project!</div>
-    <div>See <code>HELP.md</code> for instructions on how to get started.</div>
+<div class="flex h-dvh" layout:fragment="content">
+    <div class="flex w-1/2 items-center justify-center bg-neutral"><button class="btn btn-primary btn-xs sm:btn-sm md:btn-md lg:btn-lg">Responsive</button></div>
+    <div class="w-1/2 p-5">
+        <ol>
+            <li>8/7/24 8:01AM clock-in</li>
+            <li>8/7/24 8:01AM clock-out</li>
+            <li>8/7/24 8:01AM clock-in</li>
+        </ol>
+    </div>
 </div>
+
 <th:block layout:fragment="script-content">
     <!-- Add additional scripts there that are only needed for this page (Application wide scripts should be added in layout/main.html) -->
 </th:block>
