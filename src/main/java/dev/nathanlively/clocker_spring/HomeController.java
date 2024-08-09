@@ -24,6 +24,7 @@ public class HomeController {
 
     @PostMapping("/clockIn")
     public RedirectView clockIn() {
+        clockEventService.clockIn();
         return new RedirectView("/");
     }
 }

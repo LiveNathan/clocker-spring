@@ -1,6 +1,7 @@
 package dev.nathanlively.clocker_spring;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.ui.ConcurrentModel;
 import org.springframework.ui.Model;
@@ -14,12 +15,12 @@ class HomeControllerTest {
     private HomeController controller;
     private ClockRepository repository;
     private ClockEventService clockEventService;
+    private ClockEvent clockInEvent;
 
     @BeforeEach
     void setUp() {
         repository = InMemoryClockRepository.createEmpty();
-        ClockEvent clockEvent = new ClockEvent(1L, ClockService.fixed(), ClockEventType.IN);
-        repository.save(clockEvent);
+        clockInEvent = new ClockEvent(ClockService.fixed(), ClockEventType.IN);
         clockEventService = new ClockEventService(repository);
         controller = new HomeController(clockEventService);
     }
@@ -37,6 +38,7 @@ class HomeControllerTest {
 
     @Test
     void viewIndex_returnsListOfClockEvents() {
+        repository.save(clockInEvent);
         assertThat(repository.findAll()).hasSize(1);
         Model model = new ConcurrentModel();
         controller.index(model);
@@ -49,7 +51,6 @@ class HomeControllerTest {
 
     @Test
     void postClockIn_returnsTemplateName() {
-//        String expected = "redirect:/ask";
         RedirectView expected = new RedirectView("/");
 
         RedirectView actual = controller.clockIn();
@@ -57,5 +58,14 @@ class HomeControllerTest {
         assertThat(actual)
                 .usingRecursiveComparison()
                 .isEqualTo(expected);
+    }
+
+    @Test
+    @Disabled("until service")
+    void postClockIn_savesToRepository() throws Exception {
+        assertThat(repository.findAll()).hasSize(0);
+        controller.clockIn();
+
+        assertThat(repository.findAll()).hasSize(1);
     }
 }
