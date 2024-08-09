@@ -17,9 +17,10 @@
 
     <div class="w-1/2 p-5">
         <ol>
-            <li>8/7/24 8:01AM clock-in</li>
-            <li>8/7/24 8:01AM clock-out</li>
-            <li>8/7/24 8:01AM clock-in</li>
+            <li th:each="event : ${clockEvents}">
+                <span th:text="${event.time()}">8/7/24 8:01AM</span>
+                <span th:text="${event.type()}">clock-in</span>
+            </li>
         </ol>
     </div>
 </div>

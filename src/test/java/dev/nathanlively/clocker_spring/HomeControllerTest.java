@@ -1,7 +1,6 @@
 package dev.nathanlively.clocker_spring;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.ui.ConcurrentModel;
 import org.springframework.ui.Model;
@@ -61,7 +60,6 @@ class HomeControllerTest {
     }
 
     @Test
-    @Disabled("until service")
     void postClockIn_savesToRepository() throws Exception {
         assertThat(repository.findAll()).hasSize(0);
         controller.clockIn();
