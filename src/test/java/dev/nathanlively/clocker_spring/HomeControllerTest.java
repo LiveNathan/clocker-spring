@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.ui.ConcurrentModel;
 import org.springframework.ui.Model;
+import org.springframework.web.servlet.view.RedirectView;
 
 import java.util.List;
 
@@ -44,5 +45,17 @@ class HomeControllerTest {
         List<ClockEvent> actual = (List<ClockEvent>) model.getAttribute("clockEvents");
 
         assertThat(actual).isNotEmpty();
+    }
+
+    @Test
+    void postClockIn_returnsTemplateName() {
+//        String expected = "redirect:/ask";
+        RedirectView expected = new RedirectView("/");
+
+        RedirectView actual = controller.clockIn();
+
+        assertThat(actual)
+                .usingRecursiveComparison()
+                .isEqualTo(expected);
     }
 }

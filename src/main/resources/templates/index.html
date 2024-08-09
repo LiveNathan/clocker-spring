@@ -5,10 +5,16 @@
       layout:decorate="~{layout/main}">
 <body>
 <div class="flex h-dvh" layout:fragment="content">
-    <form action="#" class="flex w-1/2 items-center justify-center bg-neutral" method="post"
-          th:action="@{/clockIn}">
-        <button class="btn btn-primary btn-xs sm:btn-sm md:btn-md lg:btn-lg">Clock-in</button>
-    </form>
+    <div class="flex w-1/2 flex-col items-center justify-center bg-base-200">
+        <form action="#" class="flex h-1/2 items-center justify-center" id="clock-in-form" method="post" th:action="@{/clockIn}">
+            <button class="btn btn-primary btn-xs sm:btn-sm md:btn-md lg:btn-lg">Clock-in</button>
+        </form>
+
+        <form action="#" class="flex h-1/2 items-center justify-center" id="clock-out-form" method="post" th:action="@{/clockOut}">
+            <button class="btn btn-outline btn-primary btn-xs sm:btn-sm md:btn-md lg:btn-lg">Clock-out</button>
+        </form>
+    </div>
+
     <div class="w-1/2 p-5">
         <ol>
             <li>8/7/24 8:01AM clock-in</li>
