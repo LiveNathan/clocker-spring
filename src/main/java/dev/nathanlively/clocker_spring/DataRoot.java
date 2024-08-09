@@ -1,14 +1,11 @@
 package dev.nathanlively.clocker_spring;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class DataRoot
 {
-//    private final ClockEvents clockEvents = new ClockEvents();
-    private final Map<Long, ClockEvent> clockEvents = new HashMap<>();
+    private final List<ClockEvent> clockEvents = new ArrayList<>();
 
     public DataRoot()
     {
@@ -16,7 +13,7 @@ public class DataRoot
     }
 
     public List<ClockEvent> allClockEvents() {
-        return new ArrayList<>(this.clockEvents.values());
+        return new ArrayList<>(this.clockEvents);
     }
 
 }

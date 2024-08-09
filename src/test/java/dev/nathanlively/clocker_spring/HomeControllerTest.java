@@ -1,7 +1,6 @@
 package dev.nathanlively.clocker_spring;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.ui.ConcurrentModel;
 import org.springframework.ui.Model;
@@ -36,7 +35,6 @@ class HomeControllerTest {
     }
 
     @Test
-    @Disabled("until service finished")
     void viewIndex_returnsListOfClockEvents() {
         assertThat(repository.findAll()).hasSize(1);
         Model model = new ConcurrentModel();

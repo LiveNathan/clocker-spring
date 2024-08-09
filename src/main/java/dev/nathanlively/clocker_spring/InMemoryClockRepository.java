@@ -2,31 +2,29 @@ package dev.nathanlively.clocker_spring;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class InMemoryClockRepository implements ClockRepository {
-    private final Map<Long, ClockEvent> clockEvents;
+    private final List<ClockEvent> clockEvents;
 
-    public InMemoryClockRepository(Map<Long, ClockEvent> clockEvents) {
+    public InMemoryClockRepository(List<ClockEvent> clockEvents) {
         this.clockEvents = clockEvents;
     }
 
-    public static InMemoryClockRepository create(Map<Long, ClockEvent> clockEvents) {
+    public static InMemoryClockRepository create(List<ClockEvent> clockEvents) {
         return new InMemoryClockRepository(clockEvents);
     }
 
     public static InMemoryClockRepository createEmpty() {
-        return create(new ConcurrentHashMap<>());
+        return create(new ArrayList<>());
     }
 
     @Override
     public void save(ClockEvent clockEvent) {
-        clockEvents.put(clockEvent.id(), clockEvent);
+        clockEvents.add(clockEvent);
     }
 
     @Override
     public List<ClockEvent> findAll() {
-        return new ArrayList<>(clockEvents.values());
+        return new ArrayList<>(clockEvents);
     }
 }
