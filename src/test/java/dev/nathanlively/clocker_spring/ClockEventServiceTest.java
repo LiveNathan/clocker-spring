@@ -81,4 +81,18 @@ class ClockEventServiceTest {
         assertThat(clockRepository.findAll()).hasSize(1);
     }
 
+    @Test
+    void clockOut_givenPreviousClockOut_throws() throws Exception {
+        assertThat(clockRepository.findAll()).hasSize(0);
+        service.clockOut();
+        assertThat(clockRepository.findAll()).hasSize(1);
+        assertThat(clockRepository.findAll().getFirst().type()).isEqualTo(OUT);
+
+        assertThatThrownBy(() -> service.clockOut())
+                .isInstanceOf(ClockOutException.class)
+                .hasMessage("You must clock in first! 🙈");
+
+        assertThat(clockRepository.findAll()).hasSize(1);
+    }
+
 }
