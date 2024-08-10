@@ -13,15 +13,15 @@ import java.util.List;
 @Controller
 @RequestMapping("/")
 public class HomeController {
-    private final ClockEventService clockEventService;
+    private final ClockEventService service;
 
-    public HomeController(ClockEventService clockEventService) {
-        this.clockEventService = clockEventService;
+    public HomeController(ClockEventService service) {
+        this.service = service;
     }
 
     @GetMapping
     public String index(Model model) {
-        List<ClockEvent> all = clockEventService.all();
+        List<ClockEvent> all = service.all();
         model.addAttribute("clockEvents", all);
         return "index";
     }
@@ -29,18 +29,23 @@ public class HomeController {
     @HxRequest
     @GetMapping("/clockButton")
     public String clockButton() {
-        return "fragments/clock-forms :: clock-in";
+        ClockEventType lastClockEventType = service.getLastClockEventType();
+        if (lastClockEventType == ClockEventType.IN) {
+            return "fragments/clock-forms :: clock-out";
+        } else {
+            return "fragments/clock-forms :: clock-in";
+        }
     }
 
     @PostMapping("/clockIn")
     public RedirectView clockIn() {
-        clockEventService.clockIn();
+        service.clockIn();
         return new RedirectView("/");
     }
 
     @PostMapping("/clockOut")
     public RedirectView clockOut() {
-        clockEventService.clockOut();
+        service.clockOut();
         return new RedirectView("/");
     }
 }

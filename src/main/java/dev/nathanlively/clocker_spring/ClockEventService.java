@@ -25,14 +25,18 @@ public class ClockEventService {
     }
 
     private void validateClockIn() {
-        ClockEventType previousEventType = clockRepository.findLast();
+        ClockEventType previousEventType = getLastClockEventType();
         if (previousEventType == ClockEventType.IN) {
             throw new ClockInException("You must clock out first! ⏰");
         }
     }
 
+    public ClockEventType getLastClockEventType() {
+        return clockRepository.findLast();
+    }
+
     private void validateClockOut() {
-        ClockEventType previousEventType = clockRepository.findLast();
+        ClockEventType previousEventType = getLastClockEventType();
         if (previousEventType == ClockEventType.OUT) {
             throw new ClockOutException("You must clock in first! 🙈");
         }

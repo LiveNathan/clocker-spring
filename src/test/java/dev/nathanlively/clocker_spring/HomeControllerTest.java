@@ -60,6 +60,18 @@ class HomeControllerTest {
     }
 
     @Test
+    void clockButton_givenLastClockIn_returnsClockOutFragment() throws Exception {
+        repository.save(clockInEvent);
+        assertThat(repository.findAll()).hasSize(1);
+        String expected = "fragments/clock-forms :: clock-out";
+
+        String actual = controller.clockButton();
+
+        assertThat(actual)
+                .isEqualTo(expected);
+    }
+
+    @Test
     void postClockIn_returnsTemplateName() {
         RedirectView expected = new RedirectView("/");
 
