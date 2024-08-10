@@ -17,6 +17,9 @@ public class ClockEventService {
     public void clockIn() {
         ClockEvent clockEvent = new ClockEvent(LocalDateTime.now(), ClockEventType.IN);
         ClockEventType previousEventType = clockRepository.findLast();
+        if (previousEventType == ClockEventType.IN) {
+            throw new ClockInException("You must clock out first! ⏰");
+        }
         clockRepository.save(clockEvent);
     }
 

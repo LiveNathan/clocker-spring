@@ -1,7 +1,6 @@
 package dev.nathanlively.clocker_spring;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -60,7 +59,6 @@ class ClockEventServiceTest {
     }
 
     @Test
-    @Disabled("until repo")
     void clockIn_givenPreviousClockIn_throws() throws Exception {
         assertThat(clockRepository.findAll()).hasSize(0);
         service.clockIn();
@@ -69,7 +67,7 @@ class ClockEventServiceTest {
 
         assertThatThrownBy(() -> service.clockIn())
                 .isInstanceOf(ClockInException.class)
-                .hasMessage("Already clocked in");
+                .hasMessage("You must clock out first! ⏰");
 
         assertThat(clockRepository.findAll()).hasSize(1);
     }
