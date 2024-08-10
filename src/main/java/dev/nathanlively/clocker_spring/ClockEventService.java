@@ -15,25 +15,23 @@ public class ClockEventService {
     }
 
     public void clockIn() {
-        canClockIn();
-        ClockEvent clockEvent = new ClockEvent(LocalDateTime.now(), ClockEventType.IN);
-        clockRepository.save(clockEvent);
+        validateClockIn();
+        clockRepository.save(new ClockEvent(LocalDateTime.now(), ClockEventType.IN));
     }
 
-    private void canClockIn() {
+    public void clockOut() {
+        validateClockOut();
+        clockRepository.save(new ClockEvent(LocalDateTime.now(), ClockEventType.OUT));
+    }
+
+    private void validateClockIn() {
         ClockEventType previousEventType = clockRepository.findLast();
         if (previousEventType == ClockEventType.IN) {
             throw new ClockInException("You must clock out first! ⏰");
         }
     }
 
-    public void clockOut() {
-        canClockOut();
-        ClockEvent clockEvent = new ClockEvent(LocalDateTime.now(), ClockEventType.OUT);
-        clockRepository.save(clockEvent);
-    }
-
-    private void canClockOut() {
+    private void validateClockOut() {
         ClockEventType previousEventType = clockRepository.findLast();
         if (previousEventType == ClockEventType.OUT) {
             throw new ClockOutException("You must clock in first! 🙈");
