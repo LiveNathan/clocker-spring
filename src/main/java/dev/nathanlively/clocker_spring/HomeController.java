@@ -29,13 +29,9 @@ public class HomeController {
     @HxRequest
     @GetMapping("/clockButton")
     public String clockButton() {
-        ClockEventType lastClockEventType = service.getLastClockEventType();
-        if (lastClockEventType == ClockEventType.IN) {
-            return "fragments/clock-forms :: clock-out";
-        } else {
-            return "fragments/clock-forms :: clock-in";
-        }
-    }
+        return service.getLastClockEventType() == ClockEventType.IN ?
+                "fragments/clock-forms :: clock-out" :
+                "fragments/clock-forms :: clock-in";    }
 
     @PostMapping("/clockIn")
     public RedirectView clockIn() {
