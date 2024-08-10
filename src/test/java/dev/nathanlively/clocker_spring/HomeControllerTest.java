@@ -49,6 +49,17 @@ class HomeControllerTest {
     }
 
     @Test
+    void clockButton_givenEmptyRepo_returnsClockInFragment() throws Exception {
+        assertThat(repository.findAll()).hasSize(0);
+        String expected = "fragments/clock-forms :: clock-in";
+
+        String actual = controller.clockButton();
+
+        assertThat(actual)
+                .isEqualTo(expected);
+    }
+
+    @Test
     void postClockIn_returnsTemplateName() {
         RedirectView expected = new RedirectView("/");
 
