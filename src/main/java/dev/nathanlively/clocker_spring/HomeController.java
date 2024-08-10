@@ -8,8 +8,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.view.RedirectView;
 
-import java.util.List;
-
 @Controller
 @RequestMapping("/")
 public class HomeController {
@@ -21,8 +19,7 @@ public class HomeController {
 
     @GetMapping
     public String index(Model model) {
-        List<ClockEventView> all = service.all();
-        model.addAttribute("clockEvents", all);
+        model.addAttribute("clockEvents", service.all());
         return "index";
     }
 
@@ -37,6 +34,13 @@ public class HomeController {
     public RedirectView clockIn() {
         service.clockIn();
         return new RedirectView("/");
+    }
+    @HxRequest
+    @PostMapping("/clockIn")
+    public String clockInHx(Model model) {
+        service.clockIn();
+        model.addAttribute("event", new ClockEventView(""));
+        return "fragments/clock-lists :: clock-event-list-item";
     }
 
     @PostMapping("/clockOut")

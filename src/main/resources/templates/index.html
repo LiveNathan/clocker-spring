@@ -13,11 +13,8 @@
     </div>
 
     <div class="w-1/2 p-5">
-        <ol>
-            <li th:each="event : ${clockEvents}">
-                <span th:text="${event.time()}">8/7/24 8:01AM</span>
-                <span th:text="${event.type()}">clock-in</span>
-            </li>
+        <ol id="clock-event-list">
+            <li th:each="event : ${clockEvents}" th:text="${event.timeStamp()}"></li>
         </ol>
     </div>
 </div>

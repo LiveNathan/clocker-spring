@@ -46,6 +46,12 @@ class HomeMvcTest {
     }
 
     @Test
+    void hxPostRequestToClockIn() throws Exception {
+        mockMvc.perform(post("/clockIn").header("HX-Request", "true"))
+                .andExpect(status().is2xxSuccessful());
+    }
+
+    @Test
     void postRequestToClockOut() throws Exception {
         mockMvc.perform(post("/clockOut"))
                 .andExpect(status().is3xxRedirection());
