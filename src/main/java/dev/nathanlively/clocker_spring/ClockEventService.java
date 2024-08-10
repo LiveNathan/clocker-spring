@@ -10,8 +10,8 @@ public class ClockEventService {
         this.clockRepository = clockRepository;
     }
 
-    public List<ClockEvent> all() {
-        return clockRepository.findAll();
+    public List<ClockEventView> all() {
+        return clockRepository.findAll().stream().map(ClockEventView::from).toList();
     }
 
     public void clockIn() {

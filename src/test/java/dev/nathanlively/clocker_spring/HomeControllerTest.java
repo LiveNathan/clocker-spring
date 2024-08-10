@@ -36,14 +36,14 @@ class HomeControllerTest {
     }
 
     @Test
-    void viewIndex_returnsListOfClockEvents() {
+    void viewIndex_returnsListOfClockEventViews() {
         repository.save(clockInEvent);
         assertThat(repository.findAll()).hasSize(1);
         Model model = new ConcurrentModel();
         controller.index(model);
 
         @SuppressWarnings("unchecked")
-        List<ClockEvent> actual = (List<ClockEvent>) model.getAttribute("clockEvents");
+        List<ClockEventView> actual = (List<ClockEventView>) model.getAttribute("clockEvents");
 
         assertThat(actual).isNotEmpty();
     }

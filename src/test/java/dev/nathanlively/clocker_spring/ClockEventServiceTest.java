@@ -28,9 +28,10 @@ class ClockEventServiceTest {
     void all() throws Exception {
         clockRepository.save(clockInEvent);
         assertThat(clockRepository.findAll()).hasSize(1);
-        List<ClockEvent> expected = new ArrayList<>(List.of(clockInEvent));
+        ClockEventView clockEventView = new ClockEventView(clockInEvent.time().toString() + " " + clockInEvent.type().toString());
+        List<ClockEventView> expected = new ArrayList<>(List.of(clockEventView));
 
-        List<ClockEvent> actual = service.all();
+        List<ClockEventView> actual = service.all();
 
         assertThat(actual)
                 .isEqualTo(expected);

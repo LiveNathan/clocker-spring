@@ -21,7 +21,7 @@ public class HomeController {
 
     @GetMapping
     public String index(Model model) {
-        List<ClockEvent> all = service.all();
+        List<ClockEventView> all = service.all();
         model.addAttribute("clockEvents", all);
         return "index";
     }
