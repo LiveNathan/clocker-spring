@@ -34,6 +34,12 @@ class HomeMvcTest {
     }
 
     @Test
+    public void getRequestToClockButton() throws Exception {
+        mockMvc.perform(get("/clockButton").header("HX-Request", "true"))
+                .andExpect(status().is2xxSuccessful());
+    }
+
+    @Test
     void postRequestToClockIn() throws Exception {
         mockMvc.perform(post("/clockIn"))
                 .andExpect(status().is3xxRedirection());

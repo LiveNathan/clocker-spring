@@ -1,5 +1,6 @@
 package dev.nathanlively.clocker_spring;
 
+import io.github.wimdeblauwe.htmx.spring.boot.mvc.HxRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,6 +24,12 @@ public class HomeController {
         List<ClockEvent> all = clockEventService.all();
         model.addAttribute("clockEvents", all);
         return "index";
+    }
+
+    @HxRequest
+    @GetMapping("/clockButton")
+    public String clockButton() {
+        return "fragments/clock-forms :: clock-in";
     }
 
     @PostMapping("/clockIn")
