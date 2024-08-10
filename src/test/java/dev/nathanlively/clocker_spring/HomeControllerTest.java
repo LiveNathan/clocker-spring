@@ -15,6 +15,7 @@ class HomeControllerTest {
     private ClockRepository repository;
     private ClockEventService clockEventService;
     private ClockEvent clockInEvent;
+    private Model model;
 
     @BeforeEach
     void setUp() {
@@ -22,6 +23,7 @@ class HomeControllerTest {
         clockInEvent = new ClockEvent(ClockService.aug7at8am(), ClockEventType.IN);
         clockEventService = new ClockEventService(repository);
         controller = new HomeController(clockEventService);
+        model = new ConcurrentModel();
     }
 
     @Test
@@ -86,6 +88,14 @@ class HomeControllerTest {
     void postClockIn_savesToRepository() throws Exception {
         assertThat(repository.findAll()).hasSize(0);
         controller.clockIn();
+
+        assertThat(repository.findAll()).hasSize(1);
+    }
+
+    @Test
+    void hxPostClockIn_savesToRepository() throws Exception {
+        assertThat(repository.findAll()).hasSize(0);
+        controller.clockInHx(model);
 
         assertThat(repository.findAll()).hasSize(1);
     }
