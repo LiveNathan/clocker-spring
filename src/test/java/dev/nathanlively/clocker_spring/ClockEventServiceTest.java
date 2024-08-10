@@ -42,4 +42,11 @@ class ClockEventServiceTest {
         assertThat(clockRepository.findAll()).hasSize(1);
     }
 
+//    @Test
+//    void clockIn_given() throws Exception {
+//
+//        assertThat(actual)
+//                .isEqualTo(expected);
+//    }
+
 }

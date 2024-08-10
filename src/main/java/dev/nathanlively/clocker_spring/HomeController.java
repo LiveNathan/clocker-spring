@@ -30,4 +30,10 @@ public class HomeController {
         clockEventService.clockIn();
         return new RedirectView("/");
     }
+
+    @PostMapping("/clockOut")
+    public RedirectView clockOut() {
+//        clockEventService.clockOut();
+        return new RedirectView("/");
+    }
 }

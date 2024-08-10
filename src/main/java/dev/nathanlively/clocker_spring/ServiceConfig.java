@@ -7,8 +7,12 @@ import org.springframework.context.annotation.Configuration;
 public class ServiceConfig {
 
     @Bean
-    public ClockEventService clockEventService(EclipseClockRepository eclipseClockRepository) {
-        ClockRepository clockEclipseAdapter = new ClockEclipseAdapter(eclipseClockRepository);
-        return new ClockEventService(clockEclipseAdapter);
+    public ClockRepository clockRepository(EclipseClockRepository jdbcInterviewRepository) {
+        return new ClockEclipseAdapter(jdbcInterviewRepository);
+    }
+
+    @Bean
+    public ClockEventService clockEventService(ClockRepository clockRepository) {
+        return new ClockEventService(clockRepository);
     }
 }
