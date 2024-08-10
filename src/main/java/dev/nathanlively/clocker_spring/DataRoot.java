@@ -5,15 +5,18 @@ import java.util.List;
 
 public class DataRoot
 {
-    private final List<ClockEvent> clockEvents = new ArrayList<>();
+    private List<ClockEvent> clockEvents = new ArrayList<>();
 
-    public DataRoot()
-    {
-        super();
+//    public DataRoot()
+//    {
+//        super();
+//    }
+
+    public List<ClockEvent> getClockEvents() {
+        return clockEvents;
     }
 
-    public List<ClockEvent> allClockEvents() {
-        return new ArrayList<>(this.clockEvents);
+    public void setClockEvents(List<ClockEvent> clockEvents) {
+        this.clockEvents = clockEvents;
     }
-
 }

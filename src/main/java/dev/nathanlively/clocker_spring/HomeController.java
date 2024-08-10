@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.view.RedirectView;
 
+import java.util.List;
+
 @Controller
 @RequestMapping("/")
 public class HomeController {
@@ -18,7 +20,8 @@ public class HomeController {
 
     @GetMapping
     public String index(Model model) {
-        model.addAttribute("clockEvents", clockEventService.all());
+        List<ClockEvent> all = clockEventService.all();
+        model.addAttribute("clockEvents", all);
         return "index";
     }
 
