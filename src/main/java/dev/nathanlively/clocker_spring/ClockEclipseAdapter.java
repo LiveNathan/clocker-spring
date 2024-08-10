@@ -2,6 +2,7 @@ package dev.nathanlively.clocker_spring;
 
 import org.springframework.stereotype.Component;
 
+import java.util.Comparator;
 import java.util.List;
 
 @Component
@@ -24,6 +25,9 @@ public class ClockEclipseAdapter implements ClockRepository {
 
     @Override
     public ClockEventType findLast() {
-        return null;
+        return repository.findAll().stream()
+                .max(Comparator.comparing(ClockEvent::time))
+                .map(ClockEvent::type)
+                .orElse(null);
     }
 }

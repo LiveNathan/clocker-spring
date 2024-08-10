@@ -16,10 +16,10 @@ class InMemoryClockRepositoryTest {
     }
 
     @Test
-    void findLast() throws Exception {
+    void findLast_givenIncorrectSaveOrder_returnsLastByTime() throws Exception {
         ClockEvent clockOutEvent = new ClockEvent(ClockService.aug7at5pm(), ClockEventType.OUT);
-        clockRepository.save(clockInEvent);
         clockRepository.save(clockOutEvent);
+        clockRepository.save(clockInEvent);
 
         ClockEventType actual = clockRepository.findLast();
 
