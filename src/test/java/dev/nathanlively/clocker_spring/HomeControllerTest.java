@@ -1,6 +1,7 @@
 package dev.nathanlively.clocker_spring;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.ui.ConcurrentModel;
 import org.springframework.ui.Model;
@@ -63,6 +64,26 @@ class HomeControllerTest {
     void postClockIn_savesToRepository() throws Exception {
         assertThat(repository.findAll()).hasSize(0);
         controller.clockIn();
+
+        assertThat(repository.findAll()).hasSize(1);
+    }
+
+    @Test
+    void postClockOut_returnsTemplateName() {
+        RedirectView expected = new RedirectView("/");
+
+        RedirectView actual = controller.clockOut();
+
+        assertThat(actual)
+                .usingRecursiveComparison()
+                .isEqualTo(expected);
+    }
+
+    @Test
+    @Disabled("until service")
+    void postClockOut_savesToRepository() throws Exception {
+        assertThat(repository.findAll()).hasSize(0);
+        controller.clockOut();
 
         assertThat(repository.findAll()).hasSize(1);
     }

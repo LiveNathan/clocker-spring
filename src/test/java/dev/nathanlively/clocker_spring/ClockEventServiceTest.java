@@ -42,6 +42,15 @@ class ClockEventServiceTest {
         assertThat(clockRepository.findAll()).hasSize(1);
     }
 
+    @Test
+    void clockOut() throws Exception {
+        assertThat(clockRepository.findAll()).hasSize(0);
+
+        service.clockOut();
+
+        assertThat(clockRepository.findAll()).hasSize(1);
+    }
+
 //    @Test
 //    void clockIn_given() throws Exception {
 //

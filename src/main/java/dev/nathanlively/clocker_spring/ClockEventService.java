@@ -18,4 +18,9 @@ public class ClockEventService {
         ClockEvent clockEvent = new ClockEvent(LocalDateTime.now(), ClockEventType.IN);
         clockRepository.save(clockEvent);
     }
+
+    public void clockOut() {
+        ClockEvent clockEvent = new ClockEvent(LocalDateTime.now(), ClockEventType.OUT);
+        clockRepository.save(clockEvent);
+    }
 }
