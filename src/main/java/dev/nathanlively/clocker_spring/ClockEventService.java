@@ -16,6 +16,7 @@ public class ClockEventService {
 
     public void clockIn() {
         ClockEvent clockEvent = new ClockEvent(LocalDateTime.now(), ClockEventType.IN);
+        ClockEventType previousEventType = clockRepository.findLast();
         clockRepository.save(clockEvent);
     }
 

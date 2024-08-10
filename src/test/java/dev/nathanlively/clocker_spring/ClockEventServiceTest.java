@@ -1,12 +1,16 @@
 package dev.nathanlively.clocker_spring;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static dev.nathanlively.clocker_spring.ClockEventType.IN;
+import static dev.nathanlively.clocker_spring.ClockEventType.OUT;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class ClockEventServiceTest {
 
@@ -16,7 +20,7 @@ class ClockEventServiceTest {
 
     @BeforeEach
     void setUp() {
-        clockInEvent = new ClockEvent(ClockService.fixed(), ClockEventType.IN);
+        clockInEvent = new ClockEvent(ClockService.aug7at8am(), ClockEventType.IN);
         clockRepository = InMemoryClockRepository.createEmpty();
         service = new ClockEventService(clockRepository);
     }
@@ -34,10 +38,38 @@ class ClockEventServiceTest {
     }
 
     @Test
-    void clockIn() throws Exception {
+    void clockIn_givenEmptyRepo_savesEvent() throws Exception {
         assertThat(clockRepository.findAll()).hasSize(0);
 
         service.clockIn();
+
+        assertThat(clockRepository.findAll()).hasSize(1);
+    }
+
+    @Test
+    void clockIn_givenPreviousClockOut_savesEvent() throws Exception {
+        assertThat(clockRepository.findAll()).hasSize(0);
+        service.clockOut();
+        assertThat(clockRepository.findAll()).hasSize(1);
+        assertThat(clockRepository.findAll().getFirst().type()).isEqualTo(OUT);
+
+        service.clockIn();
+
+        assertThat(clockRepository.findAll()).hasSize(2);
+        assertThat(clockRepository.findAll().get(1).type()).isEqualTo(IN);
+    }
+
+    @Test
+    @Disabled("until repo")
+    void clockIn_givenPreviousClockIn_throws() throws Exception {
+        assertThat(clockRepository.findAll()).hasSize(0);
+        service.clockIn();
+        assertThat(clockRepository.findAll()).hasSize(1);
+        assertThat(clockRepository.findAll().getFirst().type()).isEqualTo(IN);
+
+        assertThatThrownBy(() -> service.clockIn())
+                .isInstanceOf(ClockInException.class)
+                .hasMessage("Already clocked in");
 
         assertThat(clockRepository.findAll()).hasSize(1);
     }
@@ -50,12 +82,5 @@ class ClockEventServiceTest {
 
         assertThat(clockRepository.findAll()).hasSize(1);
     }
-
-//    @Test
-//    void clockIn_given() throws Exception {
-//
-//        assertThat(actual)
-//                .isEqualTo(expected);
-//    }
 
 }

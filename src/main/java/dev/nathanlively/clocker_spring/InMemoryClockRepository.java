@@ -1,6 +1,7 @@
 package dev.nathanlively.clocker_spring;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class InMemoryClockRepository implements ClockRepository {
@@ -26,5 +27,13 @@ public class InMemoryClockRepository implements ClockRepository {
     @Override
     public List<ClockEvent> findAll() {
         return new ArrayList<>(clockEvents);
+    }
+
+    @Override
+    public ClockEventType findLast() {
+        return clockEvents.stream()
+                .max(Comparator.comparing(ClockEvent::time))
+                .map(ClockEvent::type)
+                .orElse(null);
     }
 }

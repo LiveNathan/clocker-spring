@@ -17,7 +17,7 @@ class ClockEclipseRepositoryTest {
 
     @Test
     void canReadAndWriteClockEvents() throws Exception {
-        ClockEvent clockInEvent = new ClockEvent(ClockService.fixed(), ClockEventType.IN);
+        ClockEvent clockInEvent = new ClockEvent(ClockService.aug7at8am(), ClockEventType.IN);
         eclipseClockRepository.save(clockInEvent);
         List<ClockEvent> actualEvents = eclipseClockRepository.findAll();
 

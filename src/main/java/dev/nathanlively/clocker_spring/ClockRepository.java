@@ -6,4 +6,6 @@ public interface ClockRepository {
     void save(ClockEvent clockEvent);
 
     List<ClockEvent> findAll();
+
+    ClockEventType findLast();
 }

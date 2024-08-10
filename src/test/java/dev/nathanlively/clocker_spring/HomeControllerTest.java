@@ -1,7 +1,6 @@
 package dev.nathanlively.clocker_spring;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.ui.ConcurrentModel;
 import org.springframework.ui.Model;
@@ -20,7 +19,7 @@ class HomeControllerTest {
     @BeforeEach
     void setUp() {
         repository = InMemoryClockRepository.createEmpty();
-        clockInEvent = new ClockEvent(ClockService.fixed(), ClockEventType.IN);
+        clockInEvent = new ClockEvent(ClockService.aug7at8am(), ClockEventType.IN);
         clockEventService = new ClockEventService(repository);
         controller = new HomeController(clockEventService);
     }
@@ -80,7 +79,6 @@ class HomeControllerTest {
     }
 
     @Test
-    @Disabled("until service")
     void postClockOut_savesToRepository() throws Exception {
         assertThat(repository.findAll()).hasSize(0);
         controller.clockOut();

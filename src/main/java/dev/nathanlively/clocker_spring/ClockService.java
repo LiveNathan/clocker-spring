@@ -12,8 +12,18 @@ public class ClockService {
         this.clock = clock;
     }
 
-    public static LocalDateTime fixed() {
-        Clock fixedClock = Clock.fixed(Instant.parse("2024-08-07T08:56:30.00Z"), ZoneId.of("UTC"));
+    public static LocalDateTime aug7at8am() {
+        Clock fixedClock = Clock.fixed(Instant.parse("2024-08-07T08:00:00.00Z"), ZoneId.of("UTC"));
+        return LocalDateTime.now(fixedClock);
+    }
+
+    public static LocalDateTime aug7at5pm() {
+        Clock fixedClock = Clock.fixed(Instant.parse("2024-08-07T17:00:00.00Z"), ZoneId.of("UTC"));
+        return LocalDateTime.now(fixedClock);
+    }
+
+    public static LocalDateTime aug8() {
+        Clock fixedClock = Clock.fixed(Instant.parse("2024-08-08T08:56:30.00Z"), ZoneId.of("UTC"));
         return LocalDateTime.now(fixedClock);
     }
 

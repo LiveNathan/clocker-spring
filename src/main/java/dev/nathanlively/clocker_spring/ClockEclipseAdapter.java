@@ -21,4 +21,9 @@ public class ClockEclipseAdapter implements ClockRepository {
     public List<ClockEvent> findAll() {
         return repository.findAll();
     }
+
+    @Override
+    public ClockEventType findLast() {
+        return null;
+    }
 }
