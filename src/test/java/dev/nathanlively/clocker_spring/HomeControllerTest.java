@@ -13,7 +13,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 class HomeControllerTest {
     private HomeController controller;
     private ClockRepository repository;
-    private ClockEventService clockEventService;
     private ClockEvent clockInEvent;
     private Model model;
 
@@ -21,7 +20,7 @@ class HomeControllerTest {
     void setUp() {
         repository = InMemoryClockRepository.createEmpty();
         clockInEvent = new ClockEvent(ClockService.aug7at8am(), ClockEventType.IN);
-        clockEventService = new ClockEventService(repository, ClockService.fixedAtAug7at8am());
+        ClockEventService clockEventService = new ClockEventService(repository, ClockService.fixedAtAug7at8am());
         controller = new HomeController(clockEventService);
         model = new ConcurrentModel();
     }
@@ -51,7 +50,7 @@ class HomeControllerTest {
     }
 
     @Test
-    void clockButton_givenEmptyRepo_returnsClockInFragment() throws Exception {
+    void clockButton_givenEmptyRepo_returnsClockInFragment() {
         assertThat(repository.findAll()).hasSize(0);
         String expected = "fragments/clock-forms :: clock-in";
 
@@ -62,7 +61,7 @@ class HomeControllerTest {
     }
 
     @Test
-    void clockButton_givenLastClockIn_returnsClockOutFragment() throws Exception {
+    void clockButton_givenLastClockIn_returnsClockOutFragment() {
         repository.save(clockInEvent);
         assertThat(repository.findAll()).hasSize(1);
         String expected = "fragments/clock-forms :: clock-out";
@@ -85,7 +84,7 @@ class HomeControllerTest {
     }
 
     @Test
-    void postClockIn_savesToRepository() throws Exception {
+    void postClockIn_savesToRepository() {
         assertThat(repository.findAll()).hasSize(0);
         controller.clockIn();
 
@@ -93,7 +92,7 @@ class HomeControllerTest {
     }
 
     @Test
-    void hxPostClockIn() throws Exception {
+    void hxPostClockIn() {
         assertThat(repository.findAll()).hasSize(0);
         String actualTemplateName = controller.clockInHx(model);
         assertThat(repository.findAll()).hasSize(1);
@@ -119,7 +118,7 @@ class HomeControllerTest {
     }
 
     @Test
-    void postClockOut_savesToRepository() throws Exception {
+    void postClockOut_savesToRepository() {
         assertThat(repository.findAll()).hasSize(0);
         controller.clockOut();
 
@@ -127,7 +126,7 @@ class HomeControllerTest {
     }
 
     @Test
-    void hxPostClockOut() throws Exception {
+    void hxPostClockOut() {
         repository.save(clockInEvent);
         assertThat(repository.findAll()).hasSize(1);
         String actualTemplateName = controller.clockOutHx(model);
