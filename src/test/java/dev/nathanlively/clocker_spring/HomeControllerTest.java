@@ -1,7 +1,6 @@
 package dev.nathanlively.clocker_spring;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.ui.ConcurrentModel;
 import org.springframework.ui.Model;
@@ -110,7 +109,6 @@ class HomeControllerTest {
     }
 
     @Test
-    @Disabled("until service")
     void hxPostClockIn_returnsClockEventView() throws Exception {
         ClockEventView expected = new ClockEventView(clockInEvent.time().toString() + " " + clockInEvent.type().toString());
         controller.clockInHx(model);

@@ -39,7 +39,7 @@ public class HomeController {
     @PostMapping("/clockIn")
     public String clockInHx(Model model) {
         ClockEventView clockEventView = service.clockIn();
-        model.addAttribute("event", new ClockEventView(""));
+        model.addAttribute("event", clockEventView);
         return "fragments/clock-lists :: clock-event-list-item";
     }
 
