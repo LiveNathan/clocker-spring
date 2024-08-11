@@ -20,39 +20,49 @@
         </ol>
     </div>
 
-    <div id="error-parent"></div> <!--.-->
-
+    <div id="error-parent"></div>
     <template th:replace="~{fragments/alerts :: error-message}"></template> <!--.-->
     <template th:replace="~{fragments/alerts :: timeout-message}"></template>
 </div>
 
 <th:block layout:fragment="script-content">
     <script>
-        document.addEventListener('htmx:beforeRequest', ev => { // <.>
-            removeErrorMessage();
-        });
-        document.addEventListener('htmx:sendError', ev => { // <.>
-            showErrorMessage('htmx-request-error');
-        });
-        document.addEventListener('htmx:responseError', ev => { // <.>
-            showErrorMessage('htmx-request-error');
-        });
-        document.addEventListener('htmx:timeout', ev => { // <.>
-            showErrorMessage('htmx-timeout');
-        });
-
-        function removeErrorMessage() { // <.>
-            const errorParent = document.getElementById('error-parent');
-            errorParent.innerHTML = '';
-        }
-
-        function showErrorMessage(templateId) { // <.>
-            const clonedTemplate = document.getElementById(templateId).content.cloneNode(true);
-            const errorParent = document.getElementById('error-parent');
-            errorParent.innerHTML = '';
-            errorParent.appendChild(clonedTemplate);
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/service-worker.js', { type: 'module' })
+                .then(function(registration) {
+                    console.log('Service Worker registered with scope:', registration.scope);
+                })
+                .catch(function(error) {
+                    console.log('Service Worker registration failed:', error);
+                });
         }
     </script>
+<!--    <script>-->
+<!--        document.addEventListener('htmx:beforeRequest', ev => { // <.>-->
+<!--            removeErrorMessage();-->
+<!--        });-->
+<!--        document.addEventListener('htmx:sendError', ev => { // <.>-->
+<!--            showErrorMessage('htmx-request-error');-->
+<!--        });-->
+<!--        document.addEventListener('htmx:responseError', ev => { // <.>-->
+<!--            showErrorMessage('htmx-request-error');-->
+<!--        });-->
+<!--        document.addEventListener('htmx:timeout', ev => { // <.>-->
+<!--            showErrorMessage('htmx-timeout');-->
+<!--        });-->
+
+<!--        function removeErrorMessage() { // <.>-->
+<!--            const errorParent = document.getElementById('error-parent');-->
+<!--            errorParent.innerHTML = '';-->
+<!--        }-->
+
+<!--        function showErrorMessage(templateId) { // <.>-->
+<!--            const clonedTemplate = document.getElementById(templateId).content.cloneNode(true);-->
+<!--            const errorParent = document.getElementById('error-parent');-->
+<!--            errorParent.innerHTML = '';-->
+<!--            errorParent.appendChild(clonedTemplate);-->
+<!--        }-->
+<!--    </script>-->
 </th:block>
 </body>
 </html>
