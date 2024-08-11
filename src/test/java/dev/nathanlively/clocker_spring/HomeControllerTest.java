@@ -1,6 +1,7 @@
 package dev.nathanlively.clocker_spring;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.ui.ConcurrentModel;
 import org.springframework.ui.Model;
@@ -21,7 +22,7 @@ class HomeControllerTest {
     void setUp() {
         repository = InMemoryClockRepository.createEmpty();
         clockInEvent = new ClockEvent(ClockService.aug7at8am(), ClockEventType.IN);
-        clockEventService = new ClockEventService(repository);
+        clockEventService = new ClockEventService(repository, ClockService.clockAtAug7at8am());
         controller = new HomeController(clockEventService);
         model = new ConcurrentModel();
     }
@@ -98,6 +99,26 @@ class HomeControllerTest {
         controller.clockInHx(model);
 
         assertThat(repository.findAll()).hasSize(1);
+    }
+
+    @Test
+    void hxPostClockIn_returnsTemplateName() throws Exception {
+        String actual = controller.clockInHx(model);
+
+        assertThat(actual)
+               .isEqualTo("fragments/clock-lists :: clock-event-list-item");
+    }
+
+    @Test
+    @Disabled("until service")
+    void hxPostClockIn_returnsClockEventView() throws Exception {
+        ClockEventView expected = new ClockEventView(clockInEvent.time().toString() + " " + clockInEvent.type().toString());
+        controller.clockInHx(model);
+
+        ClockEventView actual = (ClockEventView) model.getAttribute("event");
+
+        assertThat(actual)
+               .isEqualTo(expected);
     }
 
     @Test

@@ -3,6 +3,8 @@ package dev.nathanlively.clocker_spring;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.time.Clock;
+
 @Configuration
 public class ServiceConfig {
 
@@ -13,6 +15,6 @@ public class ServiceConfig {
 
     @Bean
     public ClockEventService clockEventService(ClockRepository clockRepository) {
-        return new ClockEventService(clockRepository);
+        return new ClockEventService(clockRepository, Clock.systemDefaultZone());
     }
 }

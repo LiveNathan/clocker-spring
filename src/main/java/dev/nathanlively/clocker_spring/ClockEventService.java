@@ -1,22 +1,29 @@
 package dev.nathanlively.clocker_spring;
 
+import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.List;
 
 public class ClockEventService {
     private final ClockRepository clockRepository;
+    private final Clock clock;
 
-    public ClockEventService(ClockRepository clockRepository) {
+    public ClockEventService(ClockRepository clockRepository, Clock clock) {
         this.clockRepository = clockRepository;
+        this.clock = clock;
     }
 
     public List<ClockEventView> all() {
         return clockRepository.findAll().stream().map(ClockEventView::from).toList();
     }
 
-    public void clockIn() {
+    public ClockEventView clockIn() {
         validateClockIn();
-        clockRepository.save(new ClockEvent(LocalDateTime.now(), ClockEventType.IN));
+        ClockService clockService = new ClockService(clock);
+        ClockEvent clockEvent = new ClockEvent(clockService.now(), ClockEventType.IN);
+        clockRepository.save(clockEvent);
+        ClockEventView clockEventView = new ClockEventView(clockEvent.time() + " " + clockEvent.type());
+        return clockEventView;
     }
 
     public void clockOut() {

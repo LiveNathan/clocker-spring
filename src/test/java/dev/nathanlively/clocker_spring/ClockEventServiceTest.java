@@ -3,6 +3,7 @@ package dev.nathanlively.clocker_spring;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.time.Clock;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,12 +17,14 @@ class ClockEventServiceTest {
     private ClockEvent clockInEvent;
     private ClockRepository clockRepository;
     private ClockEventService service;
+    private Clock clock;
 
     @BeforeEach
     void setUp() {
         clockInEvent = new ClockEvent(ClockService.aug7at8am(), ClockEventType.IN);
         clockRepository = InMemoryClockRepository.createEmpty();
-        service = new ClockEventService(clockRepository);
+        clock = ClockService.clockAtAug7at8am();
+        service = new ClockEventService(clockRepository, clock);
     }
 
     @Test
@@ -32,6 +35,19 @@ class ClockEventServiceTest {
         List<ClockEventView> expected = new ArrayList<>(List.of(clockEventView));
 
         List<ClockEventView> actual = service.all();
+
+        assertThat(actual)
+                .isEqualTo(expected);
+    }
+
+    @Test
+    void clockIn_returnsView() throws Exception {
+//        ClockEvent clockOutEvent = new ClockEvent(ClockService.aug7at8am(), OUT);
+//        clockRepository.save(clockInEvent);
+        assertThat(clockRepository.findAll()).hasSize(0);
+        ClockEventView expected = new ClockEventView(clockInEvent.time().toString() + " " + clockInEvent.type().toString());
+
+        ClockEventView actual = service.clockIn();
 
         assertThat(actual)
                 .isEqualTo(expected);
