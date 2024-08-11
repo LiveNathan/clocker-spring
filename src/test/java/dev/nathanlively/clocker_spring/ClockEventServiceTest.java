@@ -23,7 +23,7 @@ class ClockEventServiceTest {
     void setUp() {
         clockInEvent = new ClockEvent(ClockService.aug7at8am(), ClockEventType.IN);
         clockRepository = InMemoryClockRepository.createEmpty();
-        clock = ClockService.clockAtAug7at8am();
+        clock = ClockService.fixedAtAug7at8am();
         service = new ClockEventService(clockRepository, clock);
     }
 

@@ -21,7 +21,7 @@ class HomeControllerTest {
     void setUp() {
         repository = InMemoryClockRepository.createEmpty();
         clockInEvent = new ClockEvent(ClockService.aug7at8am(), ClockEventType.IN);
-        clockEventService = new ClockEventService(repository, ClockService.clockAtAug7at8am());
+        clockEventService = new ClockEventService(repository, ClockService.fixedAtAug7at8am());
         controller = new HomeController(clockEventService);
         model = new ConcurrentModel();
     }
@@ -124,5 +124,22 @@ class HomeControllerTest {
         controller.clockOut();
 
         assertThat(repository.findAll()).hasSize(1);
+    }
+
+    @Test
+    void hxPostClockOut() throws Exception {
+        repository.save(clockInEvent);
+        assertThat(repository.findAll()).hasSize(1);
+        String actualTemplateName = controller.clockOutHx(model);
+        assertThat(repository.findAll()).hasSize(2);
+
+        assertThat(actualTemplateName)
+                .isEqualTo("fragments/clock-lists :: clock-event-list-item");
+
+        ClockEvent clockOutEvent = new ClockEvent(ClockService.aug7at8am(), ClockEventType.OUT);
+        ClockEventView expected = new ClockEventView(clockOutEvent.time().toString() + " " + clockOutEvent.type().toString());
+        ClockEventView actualClockEventView = (ClockEventView) model.getAttribute("event");
+        assertThat(actualClockEventView)
+                .isEqualTo(expected);
     }
 }

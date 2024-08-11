@@ -13,11 +13,11 @@ public class ClockService {
     }
 
     public static LocalDateTime aug7at8am() {
-        Clock fixedClock = clockAtAug7at8am();
+        Clock fixedClock = fixedAtAug7at8am();
         return LocalDateTime.now(fixedClock);
     }
 
-    public static Clock clockAtAug7at8am() {
+    public static Clock fixedAtAug7at8am() {
         return fixed("2024-08-07T08:00:00.00Z");
     }
 
