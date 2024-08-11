@@ -6,10 +6,12 @@
 <body>
 <div class="flex h-dvh" layout:fragment="content">
     <div class="flex w-1/2 flex-col items-center justify-center bg-base-200">
-        <div hx-swap="outerHTML"
+        <div hx-swap="innerHTML"
                hx-target="this"
-               hx-trigger="load"
-             th:hx-get="@{/clockButton}"></div>
+               hx-trigger="load, clockEventAdded"
+             th:hx-get="@{/clockButton}">
+            <form></form>
+        </div>
     </div>
 
     <div class="w-1/2 p-5">
