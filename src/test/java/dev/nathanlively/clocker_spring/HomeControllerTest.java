@@ -93,30 +93,18 @@ class HomeControllerTest {
     }
 
     @Test
-    void hxPostClockIn_savesToRepository() throws Exception {
+    void hxPostClockIn() throws Exception {
         assertThat(repository.findAll()).hasSize(0);
-        controller.clockInHx(model);
-
+        String actualTemplateName = controller.clockInHx(model);
         assertThat(repository.findAll()).hasSize(1);
-    }
 
-    @Test
-    void hxPostClockIn_returnsTemplateName() throws Exception {
-        String actual = controller.clockInHx(model);
+        assertThat(actualTemplateName)
+                .isEqualTo("fragments/clock-lists :: clock-event-list-item");
 
-        assertThat(actual)
-               .isEqualTo("fragments/clock-lists :: clock-event-list-item");
-    }
-
-    @Test
-    void hxPostClockIn_returnsClockEventView() throws Exception {
         ClockEventView expected = new ClockEventView(clockInEvent.time().toString() + " " + clockInEvent.type().toString());
-        controller.clockInHx(model);
-
-        ClockEventView actual = (ClockEventView) model.getAttribute("event");
-
-        assertThat(actual)
-               .isEqualTo(expected);
+        ClockEventView actualClockEventView = (ClockEventView) model.getAttribute("event");
+        assertThat(actualClockEventView)
+                .isEqualTo(expected);
     }
 
     @Test

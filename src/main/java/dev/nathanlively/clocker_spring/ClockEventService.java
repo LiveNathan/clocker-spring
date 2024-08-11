@@ -1,7 +1,6 @@
 package dev.nathanlively.clocker_spring;
 
 import java.time.Clock;
-import java.time.LocalDateTime;
 import java.util.List;
 
 public class ClockEventService {
@@ -24,9 +23,11 @@ public class ClockEventService {
         return ClockEventView.from(clockEvent);
     }
 
-    public void clockOut() {
+    public ClockEventView clockOut() {
         validateClockOut();
-        clockRepository.save(new ClockEvent(LocalDateTime.now(), ClockEventType.OUT));
+        ClockEvent clockEvent = new ClockEvent(new ClockService(clock).now(), ClockEventType.OUT);
+        clockRepository.save(clockEvent);
+        return ClockEventView.from(clockEvent);
     }
 
     private void validateClockIn() {

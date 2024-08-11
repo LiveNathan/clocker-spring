@@ -42,8 +42,6 @@ class ClockEventServiceTest {
 
     @Test
     void clockIn_returnsView() throws Exception {
-//        ClockEvent clockOutEvent = new ClockEvent(ClockService.aug7at8am(), OUT);
-//        clockRepository.save(clockInEvent);
         assertThat(clockRepository.findAll()).hasSize(0);
         ClockEventView expected = new ClockEventView(clockInEvent.time().toString() + " " + clockInEvent.type().toString());
 
@@ -90,7 +88,20 @@ class ClockEventServiceTest {
     }
 
     @Test
-    void clockOut() throws Exception {
+    void clockOut_returnsView() throws Exception {
+        clockRepository.save(clockInEvent);
+        assertThat(clockRepository.findAll()).hasSize(1);
+        ClockEvent clockOutEvent = new ClockEvent(ClockService.aug7at8am(), ClockEventType.OUT);
+        ClockEventView expected = new ClockEventView(clockOutEvent.time().toString() + " " + clockOutEvent.type().toString());
+
+        ClockEventView actual = service.clockOut();
+
+        assertThat(actual)
+                .isEqualTo(expected);
+    }
+
+    @Test
+    void clockOut_savesToRepository() throws Exception {
         assertThat(clockRepository.findAll()).hasSize(0);
 
         service.clockOut();

@@ -28,13 +28,15 @@ public class HomeController {
     public String clockButton() {
         return service.getLastClockEventType() == ClockEventType.IN ?
                 "fragments/clock-forms :: clock-out" :
-                "fragments/clock-forms :: clock-in";    }
+                "fragments/clock-forms :: clock-in";
+    }
 
     @PostMapping("/clockIn")
     public RedirectView clockIn() {
         service.clockIn();
         return new RedirectView("/");
     }
+
     @HxRequest
     @PostMapping("/clockIn")
     public String clockInHx(Model model) {
@@ -47,5 +49,13 @@ public class HomeController {
     public RedirectView clockOut() {
         service.clockOut();
         return new RedirectView("/");
+    }
+
+    @HxRequest
+    @PostMapping("/clockOut")
+    public String clockOutHx(Model model) {
+        ClockEventView clockEventView = service.clockOut();
+        model.addAttribute("event", clockEventView);
+        return "fragments/clock-lists :: clock-event-list-item";
     }
 }
