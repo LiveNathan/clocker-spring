@@ -19,11 +19,9 @@ public class ClockEventService {
 
     public ClockEventView clockIn() {
         validateClockIn();
-        ClockService clockService = new ClockService(clock);
-        ClockEvent clockEvent = new ClockEvent(clockService.now(), ClockEventType.IN);
+        ClockEvent clockEvent = new ClockEvent(new ClockService(clock).now(), ClockEventType.IN);
         clockRepository.save(clockEvent);
-        ClockEventView clockEventView = new ClockEventView(clockEvent.time() + " " + clockEvent.type());
-        return clockEventView;
+        return ClockEventView.from(clockEvent);
     }
 
     public void clockOut() {
