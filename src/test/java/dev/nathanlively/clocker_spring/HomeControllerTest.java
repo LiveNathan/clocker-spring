@@ -13,15 +13,16 @@ import static org.assertj.core.api.Assertions.assertThat;
 class HomeControllerTest {
     private HomeController controller;
     private ClockRepository repository;
-    private ClockEventService clockEventService;
     private ClockEvent clockInEvent;
+    private Model model;
 
     @BeforeEach
     void setUp() {
         repository = InMemoryClockRepository.createEmpty();
-        clockInEvent = new ClockEvent(ClockService.fixed(), ClockEventType.IN);
-        clockEventService = new ClockEventService(repository);
+        clockInEvent = new ClockEvent(ClockService.aug7at8am(), ClockEventType.IN);
+        ClockEventService clockEventService = new ClockEventService(repository, ClockService.fixedAtAug7at8am());
         controller = new HomeController(clockEventService);
+        model = new ConcurrentModel();
     }
 
     @Test
@@ -36,16 +37,39 @@ class HomeControllerTest {
     }
 
     @Test
-    void viewIndex_returnsListOfClockEvents() {
+    void viewIndex_returnsListOfClockEventViews() {
         repository.save(clockInEvent);
         assertThat(repository.findAll()).hasSize(1);
         Model model = new ConcurrentModel();
         controller.index(model);
 
         @SuppressWarnings("unchecked")
-        List<ClockEvent> actual = (List<ClockEvent>) model.getAttribute("clockEvents");
+        List<ClockEventView> actual = (List<ClockEventView>) model.getAttribute("clockEvents");
 
         assertThat(actual).isNotEmpty();
+    }
+
+    @Test
+    void clockButton_givenEmptyRepo_returnsClockInFragment() {
+        assertThat(repository.findAll()).hasSize(0);
+        String expected = "fragments/clock-forms :: clock-in";
+
+        String actual = controller.clockButton();
+
+        assertThat(actual)
+                .isEqualTo(expected);
+    }
+
+    @Test
+    void clockButton_givenLastClockIn_returnsClockOutFragment() {
+        repository.save(clockInEvent);
+        assertThat(repository.findAll()).hasSize(1);
+        String expected = "fragments/clock-forms :: clock-out";
+
+        String actual = controller.clockButton();
+
+        assertThat(actual)
+                .isEqualTo(expected);
     }
 
     @Test
@@ -60,10 +84,61 @@ class HomeControllerTest {
     }
 
     @Test
-    void postClockIn_savesToRepository() throws Exception {
+    void postClockIn_savesToRepository() {
         assertThat(repository.findAll()).hasSize(0);
         controller.clockIn();
 
         assertThat(repository.findAll()).hasSize(1);
+    }
+
+    @Test
+    void hxPostClockIn() {
+        assertThat(repository.findAll()).hasSize(0);
+        String actualTemplateName = controller.clockInHx(model);
+        assertThat(repository.findAll()).hasSize(1);
+
+        assertThat(actualTemplateName)
+                .isEqualTo("fragments/clock-lists :: clock-event-list-item");
+
+        ClockEventView expected = new ClockEventView(clockInEvent.time().toString() + " " + clockInEvent.type().toString());
+        ClockEventView actualClockEventView = (ClockEventView) model.getAttribute("event");
+        assertThat(actualClockEventView)
+                .isEqualTo(expected);
+    }
+
+    @Test
+    void postClockOut_returnsTemplateName() {
+        RedirectView expected = new RedirectView("/");
+
+        RedirectView actual = controller.clockOut();
+
+        assertThat(actual)
+                .usingRecursiveComparison()
+                .isEqualTo(expected);
+    }
+
+    @Test
+    void postClockOut_savesToRepository() {
+        assertThat(repository.findAll()).hasSize(0);
+        controller.clockOut();
+
+        assertThat(repository.findAll()).hasSize(1);
+    }
+
+    @Test
+    void hxPostClockOut() {
+        repository.save(clockInEvent);
+        assertThat(repository.findAll()).hasSize(1);
+        String actualTemplateName = controller.clockOutHx(model);
+        assertThat(repository.findAll()).hasSize(2);
+
+        assertThat(actualTemplateName)
+                .isEqualTo("fragments/clock-lists :: clock-event-list-item");
+
+        ClockEvent clockOutEvent = new ClockEvent(ClockService.aug7at8am(), ClockEventType.OUT);
+        ClockEventView expected = new ClockEventView(clockOutEvent.time().toString() + " " + clockOutEvent.type().toString());
+        ClockEventView actualClockEventView = (ClockEventView) model.getAttribute("event");
+        assertThat(actualClockEventView)
+                .isEqualTo(expected);
     }
 }

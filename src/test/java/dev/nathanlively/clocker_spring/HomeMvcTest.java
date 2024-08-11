@@ -1,5 +1,7 @@
 package dev.nathanlively.clocker_spring;
 
+import org.eclipse.store.integrations.spring.boot.types.configuration.EclipseStoreProperties;
+import org.eclipse.store.integrations.spring.boot.types.factories.EmbeddedStorageFoundationFactory;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,10 @@ class HomeMvcTest {
     ClockRepository clockRepository;
     @MockBean
     ClockEventService clockEventService;
+    @MockBean
+    EclipseStoreProperties eclipseStoreProperties;
+    @MockBean
+    EmbeddedStorageFoundationFactory embeddedStorageFoundationFactory;
 
     @Test
     public void getRequestToIndex() throws Exception {
@@ -28,8 +34,32 @@ class HomeMvcTest {
     }
 
     @Test
+    public void getRequestToClockButton() throws Exception {
+        mockMvc.perform(get("/clockButton").header("HX-Request", "true"))
+                .andExpect(status().is2xxSuccessful());
+    }
+
+    @Test
     void postRequestToClockIn() throws Exception {
         mockMvc.perform(post("/clockIn"))
                 .andExpect(status().is3xxRedirection());
+    }
+
+    @Test
+    void hxPostRequestToClockIn() throws Exception {
+        mockMvc.perform(post("/clockIn").header("HX-Request", "true"))
+                .andExpect(status().is2xxSuccessful());
+    }
+
+    @Test
+    void postRequestToClockOut() throws Exception {
+        mockMvc.perform(post("/clockOut"))
+                .andExpect(status().is3xxRedirection());
+    }
+
+    @Test
+    void hxPostRequestToClockOut() throws Exception {
+        mockMvc.perform(post("/clockOut").header("HX-Request", "true"))
+                .andExpect(status().is2xxSuccessful());
     }
 }

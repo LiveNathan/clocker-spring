@@ -43,19 +43,10 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.eclipse.store</groupId>
-            <artifactId>storage-embedded</artifactId>
-            <version>1.4.0</version>
+            <groupId>software.xdev</groupId>
+            <artifactId>spring-data-eclipse-store</artifactId>
+            <version>2.1.0</version>
         </dependency>
-        <dependency>
-            <groupId>org.eclipse.store</groupId>
-            <artifactId>integrations-spring-boot3</artifactId>
-            <version>1.4.0</version>
-        </dependency>
-    <dependency> <!-- need this for @Read/Write for mutex locking -->
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-aop</artifactId>
-    </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -69,7 +60,7 @@
         <dependency>
             <groupId>org.webjars</groupId>
             <artifactId>webjars-locator</artifactId>
-            <version>0.46</version>
+            <version>0.52</version>
         </dependency>
         <dependency>
             <groupId>org.webjars.npm</groupId>
@@ -106,7 +97,10 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
                     <jvmArguments>
-                        --add-exports java.base/jdk.internal.misc=org.eclipse.serializer.base
+                        --add-opens=java.base/java.util=ALL-UNNAMED
+                        --add-exports java.base/jdk.internal.misc=ALL-UNNAMED
+                        --add-opens=java.base/java.lang=ALL-UNNAMED
+                        --add-opens=java.base/java.time=ALL-UNNAMED
                     </jvmArguments>
                 </configuration>
             </plugin>
@@ -152,6 +146,13 @@
             </plugins>
         </pluginManagement>
     </build>
+    <repositories>
+        <repository>
+            <id>maven_central</id>
+            <name>Maven Central</name>
+            <url>https://repo.maven.apache.org/maven2/</url>
+        </repository>
+    </repositories>
 
     <profiles>
         <profile>

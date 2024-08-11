@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<body>
+<form action="#" class="flex h-1/2 items-center justify-center" hx-swap="beforeend" hx-target="#clock-event-list"
+      id="clock-in-form" method="post"
+      th:action="@{/clockIn}" th:fragment="clock-in" th:hx-post="@{/clockIn}">
+    <button class="btn btn-primary btn-xs sm:btn-sm md:btn-md lg:btn-lg">Clock-in</button>
+</form>
+
+<form action="#" class="flex h-1/2 items-center justify-center" hx-swap="beforeend" hx-target="#clock-event-list"
+      id="clock-out-form" method="post"
+      th:action="@{/clockOut}" th:fragment="clock-out" th:hx-post="@{/clockOut}">
+    <button class="btn btn-outline btn-primary btn-xs sm:btn-sm md:btn-md lg:btn-lg">Clock-out</button>
+</form>
+
+</body>
+</html>

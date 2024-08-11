@@ -6,21 +6,17 @@
 <body>
 <div class="flex h-dvh" layout:fragment="content">
     <div class="flex w-1/2 flex-col items-center justify-center bg-base-200">
-        <form action="#" class="flex h-1/2 items-center justify-center" id="clock-in-form" method="post" th:action="@{/clockIn}">
-            <button class="btn btn-primary btn-xs sm:btn-sm md:btn-md lg:btn-lg">Clock-in</button>
-        </form>
-
-        <form action="#" class="flex h-1/2 items-center justify-center" id="clock-out-form" method="post" th:action="@{/clockOut}">
-            <button class="btn btn-outline btn-primary btn-xs sm:btn-sm md:btn-md lg:btn-lg">Clock-out</button>
-        </form>
+        <div hx-swap="innerHTML"
+               hx-target="this"
+               hx-trigger="load, clockEventAdded"
+             th:hx-get="@{/clockButton}">
+            <form></form>
+        </div>
     </div>
 
     <div class="w-1/2 p-5">
-        <ol>
-            <li th:each="event : ${clockEvents}">
-                <span th:text="${event.time()}">8/7/24 8:01AM</span>
-                <span th:text="${event.type()}">clock-in</span>
-            </li>
+        <ol id="clock-event-list">
+            <li th:each="event : ${clockEvents}" th:text="${event.timeStamp()}"></li>
         </ol>
     </div>
 </div>
