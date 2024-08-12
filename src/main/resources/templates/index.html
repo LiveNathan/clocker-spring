@@ -7,51 +7,64 @@
 <div class="flex h-dvh" layout:fragment="content">
     <div class="flex w-1/2 flex-col items-center justify-center bg-base-200">
         <div hx-swap="innerHTML"
-               hx-target="this"
-               hx-trigger="load, clockEventAdded"
+             hx-target="this"
+             hx-trigger="load, clockEventAdded"
              th:hx-get="@{/clockButton}">
             <form></form>
         </div>
     </div>
 
     <div class="w-1/2 p-5">
-        <ol id="clock-event-list">
-            <li th:each="event : ${clockEvents}" th:text="${event.timeStamp()}"></li>
+        <ol id="clock-event-list" th:each="event : ${clockEvents}">
+            <li th:text="${event.timeStamp()}"></li>
         </ol>
     </div>
 
-    <div id="error-parent"></div> <!--.-->
-
+    <div id="error-parent"></div>
     <template th:replace="~{fragments/alerts :: error-message}"></template> <!--.-->
     <template th:replace="~{fragments/alerts :: timeout-message}"></template>
 </div>
 
 <th:block layout:fragment="script-content">
     <script>
-        document.addEventListener('htmx:beforeRequest', ev => { // <.>
-            removeErrorMessage();
-        });
-        document.addEventListener('htmx:sendError', ev => { // <.>
-            showErrorMessage('htmx-request-error');
-        });
-        document.addEventListener('htmx:responseError', ev => { // <.>
-            showErrorMessage('htmx-request-error');
-        });
-        document.addEventListener('htmx:timeout', ev => { // <.>
-            showErrorMessage('htmx-timeout');
-        });
+        const registerServiceWorker = async () => {
+            if ("serviceWorker" in navigator) {
+                try {
+                    const registration = await navigator.serviceWorker.register("/service-worker.js", {
+                        scope: "/",
+                    });
+                    if (registration.installing) {
+                        console.log("Service worker installing");
+                    } else if (registration.waiting) {
+                        console.log("Service worker installed");
+                    } else if (registration.active) {
+                        console.log("Service worker active");
+                    }
 
-        function removeErrorMessage() { // <.>
-            const errorParent = document.getElementById('error-parent');
-            errorParent.innerHTML = '';
-        }
+                    window.addEventListener('online', async () => {
+                        if ('sync' in registration) {
+                            try {
+                                await registration.sync.register('sync-requests');
+                            } catch (error) {
+                                console.error('Sync registration failed', error);
+                            }
+                        }
+                    });
 
-        function showErrorMessage(templateId) { // <.>
-            const clonedTemplate = document.getElementById(templateId).content.cloneNode(true);
-            const errorParent = document.getElementById('error-parent');
-            errorParent.innerHTML = '';
-            errorParent.appendChild(clonedTemplate);
-        }
+                    // Listen for messages from the service worker
+                    navigator.serviceWorker.addEventListener('message', event => {
+                        if (event.data === 'update') {
+                            console.log('Update received from the service worker');
+                            // Refresh the page or update specific components
+                            location.reload();
+                        }
+                    });
+                } catch (error) {
+                    console.error(`Registration failed with ${error}`);
+                }
+            }
+        };
+        registerServiceWorker();
     </script>
 </th:block>
 </body>

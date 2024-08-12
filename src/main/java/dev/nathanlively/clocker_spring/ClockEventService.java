@@ -2,6 +2,7 @@ package dev.nathanlively.clocker_spring;
 
 import java.time.Clock;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ClockEventService {
     private final ClockRepository clockRepository;
@@ -13,7 +14,10 @@ public class ClockEventService {
     }
 
     public List<ClockEventView> all() {
-        return clockRepository.findAll().stream().map(ClockEventView::from).toList();
+        return clockRepository.findAll().stream()
+                .sorted((event1, event2) -> event2.time().compareTo(event1.time())) // Sorting in descending order by time
+                .map(ClockEventView::from)
+                .collect(Collectors.toList());
     }
 
     public ClockEventView clockIn() {

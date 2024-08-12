@@ -5,5 +5,8 @@ module.exports = {
     extend: {},
   },
   plugins: [require('@tailwindcss/container-queries'),require('daisyui')],
+  daisyui: {
+    themes: ["light", "dark", "forest"],
+  },
 }
 
