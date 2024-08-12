@@ -7,16 +7,16 @@
 <div class="flex h-dvh" layout:fragment="content">
     <div class="flex w-1/2 flex-col items-center justify-center bg-base-200">
         <div hx-swap="innerHTML"
-               hx-target="this"
-               hx-trigger="load, clockEventAdded"
+             hx-target="this"
+             hx-trigger="load, clockEventAdded"
              th:hx-get="@{/clockButton}">
             <form></form>
         </div>
     </div>
 
     <div class="w-1/2 p-5">
-        <ol id="clock-event-list">
-            <li th:each="event : ${clockEvents}" th:text="${event.timeStamp()}"></li>
+        <ol id="clock-event-list" th:each="event : ${clockEvents}">
+            <li th:text="${event.timeStamp()}"></li>
         </ol>
     </div>
 
@@ -48,6 +48,15 @@
                             } catch (error) {
                                 console.error('Sync registration failed', error);
                             }
+                        }
+                    });
+
+                    // Listen for messages from the service worker
+                    navigator.serviceWorker.addEventListener('message', event => {
+                        if (event.data === 'update') {
+                            console.log('Update received from the service worker');
+                            // Refresh the page or update specific components
+                            location.reload();
                         }
                     });
                 } catch (error) {
