@@ -14,7 +14,8 @@
     "postcss": "^8.4.41",
     "postcss-cli": "^11.0.0",
     "recursive-copy-cli": "^1.0.20",
-    "tailwindcss": "^3.4.8"
+    "tailwindcss": "^3.4.8",
+    "idb": "^8.0.0"
   },
   "scripts": {
     "build": "npm-run-all --parallel build:*",

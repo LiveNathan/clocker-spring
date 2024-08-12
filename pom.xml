@@ -77,6 +77,11 @@
             <artifactId>shoelace-style__shoelace</artifactId>
             <version>2.15.1</version>
         </dependency>
+        <dependency>
+            <groupId>org.webjars.npm</groupId>
+            <artifactId>idb</artifactId>
+            <version>7.1.1</version>
+        </dependency>
     </dependencies>
 
     <build>

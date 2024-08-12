@@ -1,74 +1,99 @@
-self.addEventListener('install', event => {
-    self.skipWaiting(); // Activate the service worker immediately
-});
+// Check if idb is loaded
+if (typeof idb !== 'undefined') {
+    console.log('idb is accessible');
+} else {
+    console.log('idb is not accessible');
+}
+/*
+// Create or open IndexedDB
+const openDatabase = async () => {
+    return idb.openDB('offline-requests', 1, {
+        upgrade(db) {
+            if (!db.objectStoreNames.contains('requests')) {
+                db.createObjectStore('requests', { keyPath: 'id', autoIncrement: true });
+            }
+        },
+    });
+};
 
-self.addEventListener('activate', event => {
-    event.waitUntil(self.clients.claim()); // Take control of all open clients
-});
+// Stash request in IndexedDB
+const stashRequest = async (request) => {
+    const db = await openDatabase();
+    const tx = db.transaction('requests', 'readwrite');
+    const store = tx.objectStore('requests');
+    const item = await request.json();
+    await store.put({
+        method: request.method,
+        url: request.url,
+        body: item,
+    });
+    await tx.done;
+    return new Response(JSON.stringify({ message: 'Request stashed due to offline mode.' }), { status: 503 });
+};
 
-self.addEventListener('fetch', event => {
-    const requestUrl = new URL(event.request.url);
-
-    // Bypass the service worker for Chrome extensions and POST requests to avoid issues
-    if (requestUrl.protocol.startsWith('chrome-extension') || event.request.method === 'POST') {
-        return;
+// Resend cached requests
+const resendRequests = async () => {
+    const db = await openDatabase();
+    const tx = db.transaction('requests', 'readwrite');
+    const store = tx.objectStore('requests');
+    const allRequests = await store.getAll();
+    for (const req of allRequests) {
+        const { method, url, body } = req;
+        await fetch(url, {
+            method,
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(body),
+        });
+        await store.delete(req.id);
     }
+    await tx.done;
+};
 
-    event.respondWith(
-        caches.match(event.request).then(cachedResponse => {
-            return cachedResponse || fetch(event.request).then(networkResponse => {
-                return caches.open('cache').then(cache => {
-                    cache.put(event.request, networkResponse.clone());
-                    return networkResponse;
-                });
-            });
-        }).catch(() => {
-            return new Response('', { status: 404 }); // Fallback to 404 if the fetch fails
+self.addEventListener('install', (event) => {
+    console.log('Service Worker installing.');
+    self.skipWaiting();
+});
+
+self.addEventListener('activate', (event) => {
+    console.log('Service Worker activating.');
+    const CACHE_NAME = 'v1';
+    const cacheWhitelist = [CACHE_NAME];
+    event.waitUntil(
+        caches.keys().then(cacheNames => {
+            return Promise.all(
+                cacheNames.map(cacheName => {
+                    if (!cacheWhitelist.includes(cacheName)) {
+                        console.log('Deleting old cache:', cacheName);
+                        return caches.delete(cacheName);
+                    }
+                })
+            );
+        }).then(() => {
+            console.log('Cache cleared.');
+            return self.clients.claim();
         })
     );
 });
 
-self.addEventListener('sync', event => {
-    if (event.tag === 'sync-clockOut-requests') {
-        event.waitUntil(syncClockOutRequests());
+self.addEventListener('fetch', (event) => {
+    if (event.request.method === 'POST') {
+        event.respondWith(
+            fetch(event.request).catch(() => stashRequest(event.request.clone()))
+        );
     }
 });
 
-async function syncClockOutRequests() {
-    const db = await openIndexedDB('ClockAppDB', 1);
-    const transaction = db.transaction('offlineRequests', 'readonly');
-    const store = transaction.objectStore('offlineRequests');
-    const allRequests = await store.getAll();
-
-    for (const requestData of allRequests) {
-        try {
-            await fetch(requestData.url, {
-                method: requestData.method,
-                headers: new Headers(requestData.headers),
-                body: requestData.body
-            });
-            const deleteTransaction = db.transaction('offlineRequests', 'readwrite');
-            deleteTransaction.objectStore('offlineRequests').delete(requestData.id);
-        } catch (error) {
-            console.error('Failed to sync request:', error);
-        }
+self.addEventListener('sync', (event) => {
+    if (event.tag === 'sync-requests') {
+        event.waitUntil(resendRequests());
     }
-}
+});
 
-async function openIndexedDB(name, version) {
-    return new Promise((resolve, reject) => {
-        const request = indexedDB.open(name, version);
+// Listen for the online event
+self.addEventListener('online', (event) => {
+    event.waitUntil(resendRequests());
+});
 
-        request.onupgradeneeded = function () {
-            request.result.createObjectStore('offlineRequests', { autoIncrement: true });
-        };
-
-        request.onsuccess = function () {
-            resolve(request.result);
-        };
-
-        request.onerror = function () {
-            reject(request.error);
-        };
-    });
-}
+ */
