@@ -23,16 +23,21 @@ The use case is a labor management app that needs to handle requests in the case
 
 1. **Clone the repository:**
 
-2. **Build and run the project:**
+2. **Build the front end:**
+   ```bash
+   npm run build
+   ```
+
+3. **Build and run the project:**
    ```bash
    ./mvnw spring-boot:run
    ```
 
-3. **Open the application:**
+4. **Open the application:**
    - Open your browser and navigate to `http://localhost:8080`.
    - Open Chrome Developer Tools (F12 or right-click and select "Inspect").
 
-4. **Check Service Worker Installation:**
+5. **Check Service Worker Installation:**
    - In the Developer Tools, go to the "Application" tab.
    - Under the "Service Workers" section, you should see that the service worker is installed.
 
