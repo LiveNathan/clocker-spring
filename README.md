@@ -22,10 +22,6 @@ The use case is a labor management app that needs to handle requests in the case
 ## Running the Application
 
 1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/yourusername/offline-functionality-demo.git
-   cd offline-functionality-demo
-   ```
 
 2. **Build and run the project:**
    ```bash
