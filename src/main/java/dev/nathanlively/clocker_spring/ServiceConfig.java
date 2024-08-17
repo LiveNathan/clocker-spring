@@ -8,13 +8,14 @@ import java.time.Clock;
 @Configuration
 public class ServiceConfig {
 
-    @Bean
-    public ClockRepository clockRepository(EclipseClockRepository jdbcInterviewRepository) {
-        return new ClockEclipseAdapter(jdbcInterviewRepository);
-    }
+//    @Bean
+//    public ClockRepository clockRepository(EclipseClockRepository eclipseClockRepository) {
+//        return new ClockEclipseAdapter(eclipseClockRepository);
+//    }
 
     @Bean
-    public ClockEventService clockEventService(ClockRepository clockRepository) {
-        return new ClockEventService(clockRepository, Clock.systemDefaultZone());
+    public ClockEventService clockEventService(EclipseClockRepository eclipseClockRepository) {
+        ClockRepository clockEclipseAdapter = new ClockEclipseAdapter(eclipseClockRepository);
+        return new ClockEventService(clockEclipseAdapter, Clock.systemDefaultZone());
     }
 }
